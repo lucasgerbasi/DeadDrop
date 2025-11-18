@@ -190,6 +190,7 @@ function App() {
             <div className="container">
                 <h1>Link Ready!</h1>
                 <p>Copy this link and send it. It will only work once.</p>
+                {/* THIS IS THE CORRECTED LINE */}
                 <div className="share-link-wrapper">
                     <input type="text" value={shareLink} readOnly />
                     <button onClick={copyToClipboard}>Copy</button>

@@ -84,6 +84,8 @@ function App() {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
+            const baseUrl = window.location.href.split('#')[0];
+            window.history.replaceState(null, '', baseUrl);
             setView('downloadSuccess');
 
         } catch (err) {
@@ -188,7 +190,7 @@ function App() {
             <div className="container">
                 <h1>Link Ready!</h1>
                 <p>Copy this link and send it. It will only work once.</p>
-                <div className="share--wrapper">
+                <div className="share-link-wrapper">
                     <input type="text" value={shareLink} readOnly />
                     <button onClick={copyToClipboard}>Copy</button>
                 </div>

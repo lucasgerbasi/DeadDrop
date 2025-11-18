@@ -29,7 +29,6 @@ function base64UrlDecode(str) {
 
 
 function App() {
-    // UPDATED: Added 'downloadSuccess' to the list of possible views
     const [view, setView] = useState('upload'); // 'upload', 'uploading', 'share', 'download', 'downloading', 'downloadSuccess', 'error'
     const [file, setFile] = useState(null);
     const [password, setPassword] = useState('');
@@ -85,7 +84,6 @@ function App() {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            // UPDATED: Instead of redirecting, we now show the success view.
             setView('downloadSuccess');
 
         } catch (err) {
@@ -155,7 +153,6 @@ function App() {
         );
     }
     
-    // UPDATED: New success view added here
     if (view === 'downloadSuccess') {
         return (
             <div className="container">
@@ -191,7 +188,7 @@ function App() {
             <div className="container">
                 <h1>Link Ready!</h1>
                 <p>Copy this link and send it. It will only work once.</p>
-                <div className="share-link-wrapper">
+                <div className="share--wrapper">
                     <input type="text" value={shareLink} readOnly />
                     <button onClick={copyToClipboard}>Copy</button>
                 </div>

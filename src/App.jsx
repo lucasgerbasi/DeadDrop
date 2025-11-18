@@ -29,7 +29,8 @@ function base64UrlDecode(str) {
 
 
 function App() {
-    const [view, setView] = useState('upload'); // 'upload', 'uploading', 'share', 'download', 'downloading', 'error'
+    // UPDATED: Added 'downloadSuccess' to the list of possible views
+    const [view, setView] = useState('upload'); // 'upload', 'uploading', 'share', 'download', 'downloading', 'downloadSuccess', 'error'
     const [file, setFile] = useState(null);
     const [password, setPassword] = useState('');
     const [uploadProgress, setUploadProgress] = useState(0);
@@ -37,7 +38,6 @@ function App() {
     const [error, setError] = useState('');
 
     // --- DOWNLOAD LOGIC ---
-    // This runs once when the component first loads
     useEffect(() => {
         const hash = window.location.hash.substring(1);
         if (hash) {
@@ -62,7 +62,6 @@ function App() {
             const key = base64UrlDecode(keyStr);
             const originalFileName = decodeURIComponent(encodedFileName || 'decrypted_file');
 
-
             const downloadUrl = getDownloadUrl(fileID);
             const response = await fetch(downloadUrl);
 
@@ -77,7 +76,6 @@ function App() {
                 throw new Error('Decryption failed. The password used by the sender might be incorrect or the file is corrupt.');
             }
             
-            // Create a temporary link to trigger the browser's download prompt
             const url = URL.createObjectURL(decryptedBlob);
             const a = document.createElement('a');
             a.href = url;
@@ -87,8 +85,8 @@ function App() {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            // Since the link is single-use, redirect to the main page after a successful download
-            setTimeout(() => window.location.href = window.location.origin, 100);
+            // UPDATED: Instead of redirecting, we now show the success view.
+            setView('downloadSuccess');
 
         } catch (err) {
             setError(err.message);
@@ -126,8 +124,10 @@ function App() {
             
             const keyStr = base64UrlEncode(exportedKey);
             const encodedFileName = encodeURIComponent(file.name);
+            
             const baseUrl = window.location.href.split('#')[0];
             const newShareLink = `${baseUrl}#${fileID}/${keyStr}/${encodedFileName}`;
+            
             setShareLink(newShareLink);
             setView('share');
 
@@ -144,14 +144,24 @@ function App() {
     };
     
     // --- RENDER LOGIC ---
-    // Decides what to show the user based on the current 'view' state
     
     if (view === 'error') {
         return (
             <div className="container">
                 <h1>Something went wrong</h1>
                 <p className="error-message">{error}</p>
-                <a href="/" className="button">Start Over</a>
+                <a href={window.location.href.split('#')[0]} className="button">Start Over</a>
+            </div>
+        );
+    }
+    
+    // UPDATED: New success view added here
+    if (view === 'downloadSuccess') {
+        return (
+            <div className="container">
+                <h1>Success!</h1>
+                <p>Your file has been downloaded and decrypted. The DeadDrop link you used has now been permanently destroyed.</p>
+                <a href={window.location.href.split('#')[0]} className="button">Create your own DeadDrop</a>
             </div>
         );
     }
@@ -185,7 +195,7 @@ function App() {
                     <input type="text" value={shareLink} readOnly />
                     <button onClick={copyToClipboard}>Copy</button>
                 </div>
-                 <a href="/" className="button" style={{marginTop: '1rem'}}>Share another file</a>
+                 <a href={window.location.href.split('#')[0]} className="button" style={{marginTop: '1rem', boxSizing: 'border-box'}}>Share another file</a>
             </div>
         );
     }

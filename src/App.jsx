@@ -5,7 +5,6 @@ import { encryptFile, decryptFile } from './crypto';
 import { uploadFile, getDownloadUrl } from './api';
 import './App.css';
 import JSZip from 'jszip';
-// NEW: Import toast
 import { toast } from 'react-toastify';
 
 // A helper function to encode the key for the URL

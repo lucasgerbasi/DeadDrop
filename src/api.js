@@ -1,10 +1,9 @@
 // src/api.js
 
-const API_BASE_URL = 'https://ephemeral-backend-lucasgerbasi.onrender.com'; // <-- REPLACE WITH YOUR RENDER URL
+const API_BASE_URL = 'https://ephemeral-backend-lucasgerbasi.onrender.com';
 
 export async function uploadFile(encryptedBlob, onUploadProgress) {
     const formData = new FormData();
-    // The field name 'encryptedFile' MUST match what your backend's multer is expecting.
     formData.append('encryptedFile', encryptedBlob);
 
     return new Promise((resolve, reject) => {

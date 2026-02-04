@@ -97,7 +97,7 @@ function App() {
 
         } catch (err) {
             toast.error(`Download failed: ${err.message || 'Please try again.'}`);
-            setCriticalError(err.message); // Keep for full-page error display
+            setCriticalError(err.message);
             setView('error');
         }
     };

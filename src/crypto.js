@@ -44,8 +44,6 @@ export async function encryptFile(file, password) {
     // Package the salt, iv, and encrypted data together into a single blob
     const encryptedBlob = new Blob([salt, iv, new Uint8Array(encryptedContent)]);
     
-    // We also need the key to create the final share link, but we return it separately
-    // so it NEVER gets sent to the server.
     const exportedKey = await crypto.subtle.exportKey('raw', key);
 
     return { encryptedBlob, exportedKey };
